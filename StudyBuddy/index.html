@@ -1,0 +1,273 @@
+<!-- OBAY ALMUNIRAWI 120209323 -->
+<!-- Web 1 Final Project - SPA StudyBuddy -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyBuddy - SPA</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <div class="appbar">
+    <!-- App name / logo -->
+    <div class="brand">
+      <div class="logo" aria-label="StudyBuddy Logo">SB</div>
+      <div>
+        <h1>StudyBuddy</h1>
+        <p>Planner • Habits • Resources</p>
+      </div>
+    </div>
+
+    <!-- Mobile hamburger button -->
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-links" id="navLinks">
+      <a href="#dashboard" data-target="dashboard" class="active">Dashboard</a>
+      <a href="#tasks" data-target="tasks">Tasks</a>
+      <a href="#habits" data-target="habits">Habits</a>
+      <a href="#resources" data-target="resources">Resources</a>
+      <a href="#settings" data-target="settings">Settings / About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="active" aria-label="Dashboard">
+    <div class="grid cols-3">
+      <div class="card">
+        <h2>Soon Due Tasks</h2>
+        <p class="muted" id="dashSoon">0</p>
+      </div>
+
+      <div class="card">
+        <h2>Completed Tasks</h2>
+        <p class="muted" id="dashDone">0</p>
+      </div>
+
+      <div class="card">
+        <h2>Habit Progress</h2>
+        <p class="muted" id="dashHabit">0 / 0</p>
+      </div>
+    </div>
+
+    <div class="grid cols-2" style="margin-top:12px;">
+      <div class="card">
+        <h2>Today</h2>
+        <p class="muted">Tasks due today or within 2 days</p>
+        <div id="todayList" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>Tasks Progress</h2>
+        <p class="muted" id="dashProgressText">0%</p>
+        <div class="progress" style="margin-top:10px;">
+          <div id="dashProgressBar"></div>
+        </div>
+
+        <!-- Quick add (optional in requirements) -->
+        <div style="margin-top:14px;">
+          <h2>Quick Add</h2>
+          <div class="field">
+            <label for="quickTitle">Task title</label>
+            <input id="quickTitle" type="text" placeholder="e.g., Finish report">
+            <div class="error" id="quickErr"></div>
+          </div>
+          <div class="field">
+            <label for="quickDate">Due date</label>
+            <input id="quickDate" type="date">
+          </div>
+          <button class="btn" id="quickAddBtn">Add Task</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TASKS -->
+  <section id="tasks" aria-label="Tasks">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2 id="taskFormTitle">Add Task</h2>
+
+        <!-- Task form -->
+        <form id="taskForm">
+          <div class="field">
+            <label for="tTitle">Title (required)</label>
+            <input id="tTitle" type="text" placeholder="Task title">
+            <div class="error" id="errTitle"></div>
+          </div>
+
+          <div class="field">
+            <label for="tDesc">Description (optional)</label>
+            <textarea id="tDesc" placeholder="Extra details..."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="tDate">Due date (required)</label>
+            <input id="tDate" type="date">
+            <div class="error" id="errDate"></div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="field">
+              <label for="tPriority">Priority</label>
+              <select id="tPriority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="tCategory">Category</label>
+              <select id="tCategory">
+                <option value="General" selected>General</option>
+                <option value="University">University</option>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn" id="taskSubmitBtn" type="submit">Add</button>
+          <button class="btn secondary" id="taskCancelBtn" type="button" style="display:none;">Cancel</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Tasks List</h2>
+
+        <!-- Controls -->
+        <div class="row" style="margin-bottom:10px;">
+          <select id="filterStatus" aria-label="Filter status">
+            <option value="all" selected>All</option>
+            <option value="active">Active</option>
+            <option value="completed">Completed</option>
+          </select>
+
+          <select id="filterCategory" aria-label="Filter category">
+            <option value="all" selected>All Categories</option>
+          </select>
+
+          <select id="sortBy" aria-label="Sort">
+            <option value="due" selected>Sort by Due Date</option>
+            <option value="priority">Sort by Priority</option>
+          </select>
+        </div>
+
+        <!-- Rendered tasks -->
+        <div id="taskList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HABITS -->
+  <section id="habits" aria-label="Habits">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Add Habit</h2>
+
+        <form id="habitForm">
+          <div class="field">
+            <label for="hName">Habit name (required)</label>
+            <input id="hName" type="text" placeholder="e.g., Read 20 min">
+            <div class="error" id="errHabitName"></div>
+          </div>
+
+          <div class="field">
+            <label for="hGoal">Goal days per week (1–7)</label>
+            <input id="hGoal" type="number" min="1" max="7" value="3">
+            <div class="error" id="errHabitGoal"></div>
+          </div>
+
+          <button class="btn" type="submit">Add Habit</button>
+        </form>
+
+        <div class="card" style="margin-top:12px;">
+          <h2>Weekly Summary</h2>
+          <p class="muted" id="habitSummary">0 / 0 goals achieved</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Habits</h2>
+        <div id="habitList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section id="resources" aria-label="Resources">
+    <div class="card">
+      <h2>Resources</h2>
+      <p class="muted">Loaded from resources.json</p>
+
+      <div class="row" style="margin-top:10px;">
+        <input id="resSearch" type="text" placeholder="Search by title...">
+        <select id="resCategory">
+          <option value="all" selected>All Categories</option>
+          <option value="HTML">HTML</option>
+          <option value="CSS">CSS</option>
+          <option value="JavaScript">JavaScript</option>
+          <option value="General">General</option>
+        </select>
+      </div>
+
+      <!-- Loading / error states -->
+      <p class="muted" id="resState" style="margin-top:10px;">Loading...</p>
+
+      <div id="resList" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- SETTINGS / ABOUT -->
+  <section id="settings" aria-label="Settings and About">
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Settings</h2>
+
+        <div class="row">
+          <span class="badge">Theme</span>
+          <button class="btn secondary" id="themeBtn" type="button">Toggle Light/Dark</button>
+        </div>
+
+        <div style="margin-top:12px;">
+          <button class="btn danger" id="resetBtn" type="button">Reset Data</button>
+          <p class="muted" style="margin-top:6px;">This clears tasks, habits, favorites, and settings.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>About</h2>
+        <p class="muted">
+          StudyBuddy is a small SPA that helps students plan tasks, track weekly habits,
+          and save learning resources.
+        </p>
+
+        <div style="margin-top:12px;">
+          <p><strong>Student:</strong> OBAY ALMUNIRAWI</p>
+          <p class="muted"><strong>ID:</strong> 120209323</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer style="padding:14px; text-align:center; color:var(--muted);">
+  <small>StudyBuddy • Web 1 • 2025/2026</small>
+</footer>
+
+<script src="./js/state.js"></script>
+<script src="./js/storage.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>
